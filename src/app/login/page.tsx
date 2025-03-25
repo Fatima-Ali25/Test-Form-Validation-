@@ -24,9 +24,10 @@ export default function LoginPage() {
             console.log("Login success", response.data);
             toast.success("Login success");
             router.push("/home");
-        } catch (error:any) {
-            console.log("Login failed", error.message);
-            toast.error(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+        console.log("Login error:", error.message);
+    }
         } finally{
         setLoading(false);
         }
@@ -82,13 +83,14 @@ export default function LoginPage() {
         <button
           onClick={onLogin}
           className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-md transition duration-300 transform hover:scale-105 hover:shadow-lg"
+          disabled={buttonDisabled}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
 
         {/* Signup Link */}
         <p className="text-white text-center mt-4">
-          Don't have an account?{" "}
+        Don&apos;t forget to check your email.
           <Link
             href="/signUp"
             className="underline text-blue-200 hover:text-white transition duration-200"

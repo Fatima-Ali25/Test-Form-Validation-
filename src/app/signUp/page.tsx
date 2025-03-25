@@ -5,12 +5,16 @@ import {useRouter} from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-
+interface User {
+    email: string;
+    password: string;
+    username: string;
+}
 
 
 export default function SignupPage() {
     const router = useRouter();
-    const [user, setUser] = React.useState({
+    const [user, setUser] = React.useState<User>({
         email: "",
         password: "",
         username: "",
@@ -18,7 +22,7 @@ export default function SignupPage() {
     const [buttonDisabled, setButtonDisabled] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
-    const onSignup = async () => {
+    const onSignup = async (): Promise<void> => {
         try {
             setLoading(true);
             const response = await axios.post("/api/users/signup", user);
@@ -26,10 +30,14 @@ export default function SignupPage() {
             setUser({ email: "", password: "", username: "" });
             router.push("/login");
             
-        } catch (error:any) {
-            console.log("Signup failed", error.message);
-            
-            toast.error(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log("Signup failed", error.message);
+                toast.error(error.message);
+            } else {
+                console.log("Signup failed", "An unknown error occurred");
+                toast.error("An unknown error occurred");
+            }
         }finally {
             setLoading(false);
         }

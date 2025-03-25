@@ -2,7 +2,7 @@ import { dbConnect } from "@/lib/dbConnect";
 import User from "@/models/User";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
-import { sendEmail } from "@/helpers/mailer";
+import { sendEmail } from "@/helpers/mailer"
 
 
 dbConnect()
@@ -48,8 +48,10 @@ export async function POST(request: NextRequest){
         
 
 
-    } catch (error: any) {
-        return NextResponse.json({error: error.message}, {status: 500})
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Signup error:", error.message);
+        }
 
     }
 }
