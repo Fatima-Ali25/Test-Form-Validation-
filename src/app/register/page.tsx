@@ -25,13 +25,14 @@ export default function RegisterForm() {
     formData.append("phone", data.phone);
     formData.append("message", data.message);
     if (file) formData.append("fileUrl", file);
-  
-    const response = await fetch("/api/register", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        body: formData,
+      });
   
     const result = await response.json();
+    console.log("Api response")
     setLoading(false);
   
     if (response.ok) {
@@ -42,6 +43,11 @@ export default function RegisterForm() {
     } else {
       setMessage(result.error || "Something went wrong! ❌");
     }
+  } catch (error) {
+    console.error("Error:", error);
+    setMessage("Something went wrong! ❌");
+    setLoading(false);
+  }
   };
   
   
